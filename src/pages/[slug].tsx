@@ -26,8 +26,8 @@ const Slug: NextPage = () => {
     <>
 
       <Head>
-        <title>Slugz - {router.query.slug}</title>
-        <meta name="description" content={`Slugz - ${router.query.slug as string}`} />
+        <title>Slugz - URL</title>
+        <meta name="description" content={"Slugz is a URL shortener app that allows you to swiftly build slugs that point towards links."} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
