@@ -2,6 +2,8 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import crypto from "crypto";
+import Image from "next/image";
+// import Nav from "~/components/navbar";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -128,12 +130,14 @@ const Home: NextPage = () => {
 
       {/* <Nav /> */}
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-700 via-blue-800 to-gray-900">
-        <div className="container flex flex-col items-center justify-center gap-12 px-80">
-          <h1 className="hover:opacity-75 text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+        <div className="container flex flex-col items-center justify-center px-80">
+          <Image className="hover:opacity-75 rounded-3xl" src="/favicon.ico" alt="Slugz" width={50} height={50} />
+
+          <h1 className="hover:opacity-75 mb-11 text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Slugz
           </h1>
 
-          <p className="hover:opacity-75 text-center">Build a slug given a URL. When you build a slug, it is shown to you below and automatically copied to your clipboard.</p>
+          <p className="hover:opacity-75 text-center mb-5">Build a slug given a URL. When you build a slug, it is shown to you below and automatically copied to your clipboard.</p>
 
           <form className="form-control min-w-full mb-16">
               <div className="opacity-80">
