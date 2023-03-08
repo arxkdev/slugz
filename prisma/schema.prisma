@@ -14,6 +14,14 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Slug {
+    id        String   @id @default(cuid())
+    slug      String   @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    url       String
+}
+
 model Example {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
