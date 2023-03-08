@@ -124,7 +124,7 @@ const Home: NextPage = () => {
 
       <Head>
         <title>Slugz</title>
-        <meta name="description" content="Slugz Home" />
+        <meta name="description" content="Slugz is a URL shortener app that allows you to swiftly build slugs that point towards links." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
