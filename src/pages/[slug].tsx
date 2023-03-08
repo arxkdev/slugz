@@ -26,8 +26,8 @@ const Slug: NextPage = () => {
     <>
 
       <Head>
-        <title>Slugz - {fetchLongUrl?.data as string}</title>
-        <meta name="description" content={`Slugz - ${fetchLongUrl?.data as string}`} />
+        <title>Slugz - {router.query.slug}</title>
+        <meta name="description" content={`Slugz - ${router.query.slug as string}`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
