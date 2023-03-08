@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import crypto from "crypto";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,10 +9,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { api } from "~/utils/api";
 import type { ToastProps } from "react-toastify/dist/types";
 
-function copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).catch((err) => {
-    console.error("Failed to copy: ", err);
-  });
+const originUrl = "slugz.ca";
+
+function generateRandomSlug() {
+  return crypto.randomBytes(2).toString("hex");
 }
 
 function isValidHttpUrl(string: string) {
@@ -25,11 +26,11 @@ function isValidHttpUrl(string: string) {
 }
 
 const Home: NextPage = () => {
-  const [url, setUrl] = useState("");
-  const [slug, setSlug] = useState("");
-  const [building, setBuilding] = useState(false);
-  const [builtUrl, setBuiltUrl] = useState("");
-  const originUrl = "slugz.ca";
+  const [url, setUrl] = useState<string>("");
+  const [slug, setSlug] = useState<string>("");
+  const [building, setBuilding] = useState<boolean>(false);
+  const [builtUrl, setBuiltUrl] = useState<string>("");
+  const [copiedSlug, setCopiedSlug] = useState<boolean>(false);
 
   const { mutate: createSlug } = api.slug.build.useMutation({
     onSuccess: (data) => {
@@ -48,6 +49,18 @@ const Home: NextPage = () => {
     }
   })
 
+  function copyToClipboard(text: string) {
+    setCopiedSlug(true);
+
+    navigator.clipboard.writeText(text).catch((err) => {
+      console.error("Failed to copy: ", err);
+    });
+
+    setTimeout(() => {
+      setCopiedSlug(false);
+    }, 1000);
+  }
+
   const notify = (text: string, type: string) => {
     const props = {
       position: "bottom-right",
@@ -56,6 +69,7 @@ const Home: NextPage = () => {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
+      theme: "dark",
       progress: undefined,
       delay: 0,
     } as ToastProps;
@@ -93,8 +107,14 @@ const Home: NextPage = () => {
     createSlug({
       url,
       slug
-    })
+    });
   }
+
+  useEffect(() => {
+    if (!slug || slug === "") {
+      setSlug(generateRandomSlug());
+    }
+  }, [slug])
 
   return (
     <>
@@ -107,16 +127,16 @@ const Home: NextPage = () => {
       </Head>
 
       {/* <Nav /> */}
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-700 via-blue-800 to-gray-900">
         <div className="container flex flex-col items-center justify-center gap-12 px-80">
           <h1 className="hover:opacity-75 text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Slugz
           </h1>
 
-          <p className="text-center">Build a slug given a URL. When you build a slug, it is shown to you below and automatically copied to your clipboard.</p>
+          <p className="hover:opacity-75 text-center">Build a slug given a URL. When you build a slug, it is shown to you below and automatically copied to your clipboard.</p>
 
           <form className="form-control min-w-full mb-16">
-              <div>
+              <div className="opacity-80">
                 <label className="label">
                   <span className="label-text">Your URL</span>
                 </label>
@@ -126,7 +146,7 @@ const Home: NextPage = () => {
                 </label>
               </div>
 
-              <div className="mt-4">
+              <div className="opacity-80 mt-4">
                 <label className="label">
                   <span className="label-text">Your Slug</span>
                 </label>
@@ -136,19 +156,20 @@ const Home: NextPage = () => {
                 </label>
               </div>
 
-              <p className="mt-6 text-center">{originUrl}/{slug} <span className="text-green-400">points to:</span> {url}</p>
+              <p className="hover:opacity-75 mt-6 text-center">{originUrl}/{slug} <span className="text-green-400">points to:</span> {url}</p>
 
-              <div className="mt-4">
+              <div className="opacity-80 mt-4">
                 <button type="button" onClick={() => build()} className="btn w-full">
                   {building ? "Building..." : "Build"}
                 </button>
               </div>
 
-              {
-                builtUrl && builtUrl !== "" ? (
-                  <p className="mt-6 mb-24 text-center text-3xl">Your url: {builtUrl}</p>
-                ) : null
-              }
+              {builtUrl && builtUrl !== "" ? (
+                <div className="opacity-80 flex justify-center mt-6 mb-24">
+                  <p className="hover:opacity-75 text-center text-3xl mt-1 mr-4">Your url: {builtUrl}</p>
+                  <button type="button" onClick={() => copyToClipboard(builtUrl)} className="btn">{copiedSlug ? "Copied..." : "Copy"}</button>
+                </div>
+              ) : null}
           </form>
         </div>
       </main>
