@@ -1,4 +1,5 @@
 import { type NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { api } from "~/utils/api"; 
@@ -20,7 +21,18 @@ const Slug: NextPage = () => {
     window.location.href = fetchLongUrl.data;
   }, [fetchLongUrl.data]);
 
-  return <div></div>
+  if (fetchLongUrl.isError) return <div className="text-center mt-10 text-3xl">404 - Not found</div>;
+  return (
+    <>
+
+      <Head>
+        <title>Slugz - {fetchLongUrl?.data as string}</title>
+        <meta name="description" content={`Slugz - ${fetchLongUrl?.data as string}`} />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+    </>
+  )
 };
 
 export default Slug;
