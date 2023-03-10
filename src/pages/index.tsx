@@ -17,15 +17,8 @@ function generateRandomSlug() {
   return crypto.randomBytes(3).toString("hex");
 }
 
-function isValidHttpUrl(string: string) {
-  let url;
-  try {
-    url = new URL(string);
-  } catch (_) {
-    return false;
-  }
-  return url.protocol === "http:" || url.protocol === "https:";
-}
+const urlPattern =
+    /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/;
 
 const Home: NextPage = () => {
   const [url, setUrl] = useState<string>("");
@@ -99,15 +92,21 @@ const Home: NextPage = () => {
       return;
     }
 
-    if (!isValidHttpUrl(url)) {
+    if (!urlPattern.test(url)) {
       notify("Please enter a valid URL!", "error");
       setBuilding(false);
       return;
     }
+
+    let newUrl = url;
+
+    if (!/^https?:\/\//i.test(url)) {
+      newUrl = `http://${url}`;
+    }
     
     // Create slug
     createSlug({
-      url,
+      url: newUrl,
       slug
     });
   }
@@ -131,9 +130,7 @@ const Home: NextPage = () => {
       {/* <Nav /> */}
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-700 via-blue-800 to-gray-900">
         <div className="container flex flex-col items-center justify-center pr-28 pl-28">
-          <Image className="hover:opacity-75 rounded-3xl" height={50} width={50} alt="" src="/favicon.ico" />
-
-          <h1 className="hover:opacity-75 mb-11 text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+          <h1 className="hover:opacity-75 mb-11 mt-11 text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Slugz
           </h1>
 
@@ -162,8 +159,8 @@ const Home: NextPage = () => {
 
               <p className="hover:opacity-75 mt-6 text-center">{originUrl}/{slug} <span className="text-green-400">points to:</span> {url}</p>
 
-              <div className="opacity-80 mt-4">
-                <button type="button" onClick={() => build()} className="btn w-full">
+              <div className="opacity-80 mt-4 self-center">
+                <button type="button" onClick={() => build()} className="btn w-96">
                   {building ? "Building..." : "Build"}
                 </button>
               </div>

@@ -8,7 +8,7 @@ import {
 
 export const slugRouter = createTRPCRouter({
   build: publicProcedure
-  .input(z.object({ slug: z.string(), url: z.string() }))
+  .input(z.object({ slug: z.string(), url: z.string().url() }))
   .mutation(async ({ input, ctx }) => {
     const { slug, url } = input;
 
