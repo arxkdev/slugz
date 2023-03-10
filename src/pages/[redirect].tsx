@@ -15,7 +15,6 @@ type ContextType = {
 // The query slug will be the ID of the slug, redirect to the query slug
 
 export const getServerSideProps = async ({ params, res }: ContextType) => {
-  console.log(params.redirect)
   try {
     const url = await prisma.slug.findFirst({
       where: {
