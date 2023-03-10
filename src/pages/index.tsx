@@ -130,7 +130,7 @@ const Home: NextPage = () => {
 
       {/* <Nav /> */}
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-700 via-blue-800 to-gray-900">
-        <div className="container flex flex-col items-center justify-center px-96">
+        <div className="container flex flex-col items-center justify-center pr-28 pl-28">
           <Image className="hover:opacity-75 rounded-3xl" height={50} width={50} alt="" src="/favicon.ico" />
 
           <h1 className="hover:opacity-75 mb-11 text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">

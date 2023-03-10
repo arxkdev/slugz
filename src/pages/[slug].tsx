@@ -1,38 +1,47 @@
-import { type NextPage } from "next";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { api } from "~/utils/api"; 
+import { prisma } from "../server/db";
+import ErrorPage from "next/error";
+
+type ContextType = {
+  params: {
+    redirect: string;
+  };
+  
+  res: {
+    statusCode: number;
+  };
+};
 
 // Here is the slug page
 // The query slug will be the ID of the slug, redirect to the query slug
 
-const Slug: NextPage = () => {
-  const router = useRouter();
-  
-  const fetchLongUrl = api.slug.get.useQuery({slugId: router.query.slug as string},
-    {
-      enabled: !!router.query.slug
+export const getServerSideProps = async ({ params, res }: ContextType) => {
+  console.log(params.redirect)
+  try {
+    const url = await prisma.slug.findFirst({
+      where: {
+        slug: params.redirect,
+      },
+    });
+
+    if (url) {
+      return {
+        redirect: {
+          destination: url.url,
+        },
+      };
     }
-  );
 
-  useEffect(() => {
-    if (!fetchLongUrl.data) return;
-    window.location.href = fetchLongUrl.data;
-  }, [fetchLongUrl.data]);
-
-  if (fetchLongUrl.isError) return <div className="text-center mt-10 text-3xl">404 - Not found</div>;
-  return (
-    <>
-
-      <Head>
-        <title>Slugz - URL</title>
-        <meta name="description" content={"Slugz is a URL shortener app that allows you to swiftly build slugs that point towards links."} />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-    </>
-  )
+    if (!url) {
+      res.statusCode = 404;
+      return { props: { url: null } };
+    }
+  } catch (error) {
+    console.error();
+  }
 };
 
-export default Slug;
+const Link = () => {
+  return <ErrorPage statusCode={404} />;
+};
+
+export default Link;
