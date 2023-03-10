@@ -2,8 +2,6 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import crypto from "crypto";
-import Image from "next/image";
-// import Nav from "~/components/navbar";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,7 +28,7 @@ const Home: NextPage = () => {
   const { mutate: createSlug } = api.slug.build.useMutation({
     onSuccess: (data) => {
       setBuiltUrl(data);
-      notify("Slug created!", "success");
+      notify("Slug created and copied!", "success");
       setSlug("");
       setUrl("");
       setBuilding(false);
@@ -129,14 +127,14 @@ const Home: NextPage = () => {
 
       {/* <Nav /> */}
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-700 via-blue-800 to-gray-900">
-        <div className="container flex flex-col items-center justify-center pr-28 pl-28">
-          <h1 className="hover:opacity-75 mb-11 mt-11 text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+        <div className="container flex flex-col max-w-md pr-10 pl-10 items-center justify-center">
+          <h1 className="hover:opacity-75 three-d mb-11 mt-2 text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Slugz
           </h1>
 
           <p className="hover:opacity-75 text-center mb-5">Build a slug given a URL. When you build a slug, it is shown to you below and automatically copied to your clipboard.</p>
 
-          <form className="form-control min-w-full mb-16">
+          <form className="form-control w-full mb-16">
               <div className="opacity-80">
                 <label className="label">
                   <span className="label-text">Your URL</span>
@@ -157,17 +155,24 @@ const Home: NextPage = () => {
                 </label>
               </div>
 
-              <p className="hover:opacity-75 mt-6 text-center">{originUrl}/{slug} <span className="text-green-400">points to:</span> {url}</p>
+              <p className="hover:opacity-75 mt-6 text-center">{originUrl}/{slug} <span className="text-blue-400">points to:</span> {url ? url : "nothing"}</p>
 
-              <div className="opacity-80 mt-4 self-center">
-                <button type="button" onClick={() => build()} className="btn w-96">
-                  {building ? "Building..." : "Build"}
-                </button>
+              <div className="opacity-80 mt-5 self-center">
+                <div className='button w-72 h-16 bg-blue-500 rounded-lg cursor-pointer select-none
+                  active:translate-y-2  active:[box-shadow:0_0px_0_0_#1b6ff8,0_0px_0_0_#1b70f841]
+                  active:border-b-[0px]
+                  transition-all duration-150 [box-shadow:0_10px_0_0_#1b6ff8,0_15px_0_0_#1b70f841]
+                  border-b-[1px] border-blue-400
+                '>
+                  <span onClick={() => build()} className='flex flex-col justify-center items-center h-full text-white font-bold text-lg '>
+                    {building ? "Building..." : "Build"}
+                  </span>
+                </div>
               </div>
 
               {builtUrl && builtUrl !== "" ? (
-                <div className="opacity-80 flex justify-center mt-6 mb-24">
-                  <p className="hover:opacity-75 text-center text-3xl mt-1 mr-4">Your url: {builtUrl}</p>
+                <div className="opacity-80 flex justify-center mt-10 mb-24">
+                  <p className="hover:opacity-75 text-center text-md mt-3 mr-4">Your url: {builtUrl}</p>
                   <button type="button" onClick={() => copyToClipboard(builtUrl)} className="btn">{copiedSlug ? "Copied..." : "Copy"}</button>
                 </div>
               ) : null}
