@@ -155,7 +155,7 @@ const Home: NextPage = () => {
                 </label>
               </div>
 
-              <p className="hover:opacity-75 mt-6 text-center">{originUrl}/{slug} <span className="text-blue-400">points to:</span> {url ? url : "nothing"}</p>
+              <p className="hover:opacity-75 mt-6 text-center break-words">{originUrl}/{slug} <span className="text-blue-400">points to:</span> {url ? url : "nothing"}</p>
 
               <div className="opacity-80 mt-5 self-center">
                 <div className='button w-72 h-16 bg-blue-500 rounded-lg cursor-pointer select-none
