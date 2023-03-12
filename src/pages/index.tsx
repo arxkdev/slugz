@@ -15,7 +15,7 @@ import { nanoid } from "nanoid";
 const originUrl = "slugz.ca";
 
 function generateRandomSlug() {
-  return nanoid(8);
+  return nanoid(7);
 }
 
 const urlPattern =
@@ -162,7 +162,7 @@ const Home: NextPage = () => {
               <label className="label">
                 <span className="label-text">Your Slug</span>
               </label>
-              <div className="flex">
+              <div className="flex w-full gap-3">
                 <label className="input-group input-group-vertical">
                   <span className="pb-1">Slug</span>
                   <input
@@ -172,18 +172,14 @@ const Home: NextPage = () => {
                     placeholder="Your slug"
                     className="input input-bordered"
                   />
+                  <button
+                    type="button"
+                    title="Generate a random password"
+                    className="btn btn-outline w-full mb-2"
+                    onClick={() => setValue("slug", generateRandomSlug())}
+                  >Random</button>
                 </label>
-                <button type="button">
-                  <span 
-                    className="text-blue-400 btn btn-outline h-full ml-2"
-                    onClick={() => {
-                      const randomSlug = generateRandomSlug();
-                      setValue("slug", randomSlug);
-                    }}
-                  >
-                    Random
-                  </span>
-                </button>
+                
               </div>
             </div>
 
