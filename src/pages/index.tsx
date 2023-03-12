@@ -1,7 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import crypto from "crypto";
 
 import { ToastContainer, toast } from 'react-toastify';
 import { ErrorMessage } from '@hookform/error-message';
@@ -11,11 +10,12 @@ import { api } from "~/utils/api";
 import type { ToastProps } from "react-toastify/dist/types";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
+import { nanoid } from "nanoid";
 
 const originUrl = "slugz.ca";
 
 function generateRandomSlug() {
-  return crypto.randomBytes(3).toString("hex");
+  return nanoid(8);
 }
 
 const urlPattern =
